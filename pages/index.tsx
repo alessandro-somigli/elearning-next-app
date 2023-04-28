@@ -1,8 +1,6 @@
 import Head from 'next/head'
 
-import { Inter } from 'next/font/google'
-
-const inter = Inter({ subsets: ['latin'] })
+import Navbar from '@/components/navbar'
 
 export const config = { 
   runtime: 'experimental-edge',
@@ -19,6 +17,8 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
+        <Navbar />
+
         hello world!
       </main>
     </>

@@ -5,8 +5,9 @@ export const config = {
   regions: ['fra1']
 }
 
-const SignInPage = () => (
-  <SignIn />
-);
-
-export default SignInPage;
+export default function SignInPage() { 
+  
+  return (
+    <SignIn />
+  )
+}

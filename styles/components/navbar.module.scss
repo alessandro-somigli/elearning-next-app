@@ -1,0 +1,19 @@
+.nav {
+    display: flex;
+    align-items: center;
+}
+
+.nav_logo {
+    display: flex;
+    align-items: center;
+
+    .logo_image {}
+
+    .logo_text {
+        font-size: 2rem;
+    }
+}
+
+.nav_account {
+    margin-left: auto;
+}
