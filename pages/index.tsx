@@ -4,7 +4,10 @@ import { Inter } from 'next/font/google'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export const config = { runtime: 'experimental-edge' }
+export const config = { 
+  runtime: 'experimental-edge',
+  regions: ['fra1']
+}
 
 export default function Home() {
   return (
