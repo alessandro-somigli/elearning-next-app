@@ -2,13 +2,32 @@ import Head from 'next/head'
 
 import Navbar from '@/components/navbar'
 import Courses from '@/components/courses'
+import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
+
+import type { Course } from '@/types/schema'
+import { clerkClient, getAuth } from '@clerk/nextjs/server'
+import { GET_Courses } from '@/pages/api/courses'
 
 export const config = { 
   runtime: 'experimental-edge',
   regions: ['fra1']
 }
 
-export default function Home() {
+export const getServerSideProps: GetServerSideProps<{courses: Array<Course> }> = async (context: GetServerSidePropsContext) => {
+  const { userId } = getAuth(context.req);
+  const user = userId ? await clerkClient.users.getUser(userId) : null;
+  const emailAddress = user?.emailAddresses[0].emailAddress as string | null
+  
+  const DBresponse = await GET_Courses({ useremail: emailAddress })
+  const rows = DBresponse.rows as Array<Course>
+
+  return {
+    props: { courses: rows }
+  }
+};
+
+export default function Home(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
+
   return (
     <>
       <Head>
@@ -17,10 +36,11 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
       <main>
         <Navbar />
 
-        <Courses />
+        <Courses courses={props.courses} />
       </main>
     </>
   )

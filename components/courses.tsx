@@ -1,9 +1,19 @@
+import { Course } from "@/types/schema";
 
-export default function Courses() {
+type CoursesProps = {
+  courses: Array<Course>;
+};
 
-    return (
-        <div>
-            
+export default function Courses(props: CoursesProps) {
+  console.log(props)
+
+  return (
+    <div>
+      {props.courses.map(course => (
+        <div key={course.ID}>
+          <a>{course.name}</a>
         </div>
-    )
+      ))}
+    </div>
+  );
 }

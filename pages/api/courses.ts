@@ -12,24 +12,28 @@ export const config = {
   regions: ["fra1"],
 };
 
-export default async function GET(
+export const GET_Courses = async (params: { useremail: string | null }) => {
+  let fetch_courses = "";
+  if (params.useremail) { // row reads: Courses.rows + Partake.rows + Own.rows
+    fetch_courses = `
+    SELECT DISTINCT Courses.* FROM Courses
+    LEFT JOIN Partake ON Courses.ID = Partake.course
+    LEFT JOIN Own ON Courses.ID = Own.course
+    WHERE Partake.student = '${params.useremail}' OR Own.professor = '${params.useremail}';`;
+  } else { // row reads: Courses.rows
+    fetch_courses = `SELECT * FROM Courses;`;
+  }
+
+  return await planetscale.execute(fetch_courses);
+};
+
+export default async function GET (
   request: NextRequest,
   context: NextFetchEvent
 ) {
-  const { searchParams } = new URL(request.url)
-  const useremail = searchParams.get('useremail')
+  const { searchParams } = new URL(request.url);
+  const useremail = searchParams.get("useremail");
 
-  let fetch_courses = "";
-  if (useremail) { // row reads: Courses.rows + Partake.rows + Own.rows
-    fetch_courses = `
-    SELECT DISTINCT Courses.* FROM Courses
-    INNER JOIN Partake ON Courses.ID = Partake.course
-    INNER JOIN Own ON Courses.ID = Own.course
-    WHERE Partake.student = '${useremail}' OR Own.professor = '${useremail}';`
-  } else { // row reads: Courses.rows
-    fetch_courses = `SELECT * FROM Courses;` 
-  }
-  
-  const DBresponse = await planetscale.execute(fetch_courses)
-  return NextResponse.json(DBresponse.rows);
+  const DBresponse = await GET_Courses({ useremail });
+  return NextResponse.json(DBresponse);
 }
