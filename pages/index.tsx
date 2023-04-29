@@ -1,6 +1,7 @@
 import Head from 'next/head'
 
 import Navbar from '@/components/navbar'
+import Courses from '@/components/courses'
 
 export const config = { 
   runtime: 'experimental-edge',
@@ -19,7 +20,7 @@ export default function Home() {
       <main>
         <Navbar />
 
-        hello world!
+        <Courses />
       </main>
     </>
   )
