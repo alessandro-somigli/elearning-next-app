@@ -14,7 +14,8 @@ export const config = {
 };
 
 export type GetCourseDataResponse = {
-  professors: Array<Own & Course>
+  course: string
+  professors: Array<Own>
   students: Array<Partake>
   tests: Array<Test>
 }
@@ -37,9 +38,12 @@ export const GetCourseData = async (params: { courseid: string }) => {
   INNER JOIN Tests ON Courses.ID = Tests.course
   WHERE Courses.ID = ${params.courseid};
   `);
+
+  const course = (await professors).rows[0] as Course
   
   return {
-    professors: (await professors).rows as Array<Own & Course>,
+    course: course.name,
+    professors: (await professors).rows as Array<Own>,
     students: (await students).rows as Array<Partake>,
     tests: (await tests).rows as Array<Test>
   } as GetCourseDataResponse

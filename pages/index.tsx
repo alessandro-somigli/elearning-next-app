@@ -14,11 +14,6 @@ import type { GetUserRoleResponse } from './api/user/role'
 
 import style from '@/styles/pages/home.module.scss'
 
-export const config = { 
-  runtime: 'experimental-edge',
-  regions: ['fra1']
-}
-
 export const getServerSideProps: GetServerSideProps<{
   courses: GetCoursesResponse,
   role: GetUserRoleResponse
