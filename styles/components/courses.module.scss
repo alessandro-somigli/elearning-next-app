@@ -1,0 +1,35 @@
+.courses {
+    display: flex;
+    flex-direction: column;
+
+    width: 80%;
+    padding: 1.5rem 0 2rem;
+
+    border-radius: 2rem;
+
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+    .courses_title {
+        font-size: 2rem;
+        font-weight: bold;
+
+        padding: 0rem 2rem 1rem;
+
+        border-bottom: 1px solid black;
+    }
+
+    .course {
+        padding: 1rem 2rem;
+
+        cursor: pointer;
+
+        transition: background .2s ease;
+
+        &:hover { background-color: #ddd; }
+
+        .course_title {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+    }
+}

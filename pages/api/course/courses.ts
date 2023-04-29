@@ -1,5 +1,6 @@
 import { connect } from "@planetscale/database";
 import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
+import { Course, Professor } from "@/types/schema";
 
 const planetscale = connect({
   host: process.env.DATABASE_HOST,
@@ -12,7 +13,9 @@ export const config = {
   regions: ["fra1"],
 };
 
-export const GET_Courses = async (params: { useremail: string | null }) => {
+export type GetCoursesResponse = Array<Course>;
+
+export const GetCourses = async (params: { useremail: string | null; }): Promise<GetCoursesResponse> => {
   let fetch_courses = "";
   if (params.useremail) { // row reads: Courses.rows + Partake.rows + Own.rows
     fetch_courses = `
@@ -24,16 +27,16 @@ export const GET_Courses = async (params: { useremail: string | null }) => {
     fetch_courses = `SELECT * FROM Courses;`;
   }
 
-  return await planetscale.execute(fetch_courses);
+  const DBResponse = await planetscale.execute(fetch_courses);
+  return DBResponse.rows as GetCoursesResponse;
 };
 
-export default async function GET (
+export default async function GET(
   request: NextRequest,
   context: NextFetchEvent
 ) {
   const { searchParams } = new URL(request.url);
   const useremail = searchParams.get("useremail");
 
-  const DBresponse = await GET_Courses({ useremail });
-  return NextResponse.json(DBresponse);
+  return NextResponse.json( await GetCourses({ useremail }) );
 }
