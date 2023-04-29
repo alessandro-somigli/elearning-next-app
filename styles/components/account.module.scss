@@ -2,5 +2,58 @@
     display: flex;
     align-items: center;
 
+    position: relative;
+
+    height: 100%;
+
     margin-left: auto;
+    padding-right: .5rem;
+
+    // from https://codepen.io/rzkytmgr/pen/BaooXJP
+    .signin_button {
+        width: 6rem;
+
+        margin: 0 10px;
+        padding: 10px 0;
+
+        border: 0;
+        border-radius: 4px;
+
+        font-size: 1rem;
+        font-family: inherit;
+        font-weight: 600;
+
+        box-shadow: 0 0 20px #6855E016;
+        transition: 0.4s;
+
+        cursor: pointer;
+
+        color: #6855E0;
+        background-color: #fff;
+        border: 1px solid #6855E0;
+    }
+      
+    .signin_button:hover {
+        color: white;
+        width: none;
+        box-shadow: 0 0 20px #6855E090;
+        background-color: #6855E0;
+    }
+}
+
+.userButtonOuterIdentifier {
+    padding: .25rem .75rem;
+
+    border-radius: .5rem;
+
+    transition: background .25s ease;
+
+    cursor: default;
+
+    &:hover { background-color: #eee; }
+}
+
+.userButtonAvatarBox {
+    width: 2.5rem;
+    height: 2.5rem;
 }

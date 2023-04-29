@@ -1,24 +1,31 @@
-import { useUser } from "@clerk/nextjs";
-import Link from "next/link";
-import Image from "next/image";
+import { SignInButton, SignOutButton, SignedIn, SignedOut, UserButton, useUser } from "@clerk/nextjs";
 
 import style from "@/styles/components/account.module.scss"
+import { useState } from "react";
+
+import { Inter } from "next/font/google";
+const inter = Inter({ subsets: ['latin'] })
 
 export default function Account() {
-  const { user, isSignedIn, isLoaded } = useUser();
+  const { user } = useUser();
+
+  const onClickSignOut = () => { SignOutButton}
 
   return (
     <div className={style.account}>
-      {!isLoaded ? (
-        <>spinner</>
-      ) : !isSignedIn ? (
-        <Link href={"/auth/signin"}>sign in</Link>
-      ) : (
-        <>
-          <span>{user.fullName}</span>
-          <Image src={user.profileImageUrl} alt="user-image" width={48} height={48} />
-        </>
-      )}
+      <SignedIn>
+        <UserButton showName={true} appearance={{ 
+          elements: {
+            userButtonOuterIdentifier: style.userButtonOuterIdentifier,
+            userButtonAvatarBox: style.userButtonAvatarBox,
+          },
+          variables: { fontSize: "1.25rem" }
+        }} />
+      </SignedIn>
+      <SignedOut>
+        <SignInButton><button className={style.signin_button}>Login</button></SignInButton>
+      </SignedOut>
+      
     </div>
   );
 }

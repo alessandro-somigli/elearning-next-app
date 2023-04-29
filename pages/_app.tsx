@@ -7,9 +7,16 @@ const inter = Inter({ subsets: ['latin'] })
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <ClerkProvider {...pageProps}>
+    <ClerkProvider appearance={{
+      variables: {
+        fontFamily: inter.style.fontFamily,
+        fontWeight: { normal: inter.style.fontWeight },
+        fontSize: "1rem"
+    }}} {...pageProps}>
+      
       <main className={inter.className}>
       <Component {...pageProps} />
       </main>
+    
     </ClerkProvider>)
 }
