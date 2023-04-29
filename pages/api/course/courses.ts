@@ -38,5 +38,12 @@ export default async function GET(
   const { searchParams } = new URL(request.url);
   const useremail = searchParams.get("useremail");
 
-  return NextResponse.json( await GetCourses({ useremail }) );
+  return NextResponse.json( 
+    await GetCourses({ useremail }),
+    {
+      status: 200,
+      headers: {
+        'Cache-Control': 's-maxage=1, stale-while-revalidate'
+      }
+    } );
 }

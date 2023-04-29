@@ -49,9 +49,17 @@ export default async function GET (
   request: NextRequest,
   context: NextFetchEvent
 ) {
+
   const { searchParams } = new URL(request.url);
   const courseid = searchParams.get("courseid");
 
   const DBresponse = (courseid)? await GetCourseData({ courseid }) : null;
-  return NextResponse.json(DBresponse);
+  return NextResponse.json(
+    DBresponse,
+    {
+      status: 200,
+      headers: {
+        'Cache-Control': 's-maxage=1, stale-while-revalidate'
+      }
+    });
 }

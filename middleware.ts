@@ -13,7 +13,7 @@ const matches = (path: string, resitrictions: Array<string>): string | undefined
   );
 };
 
-export default withClerkMiddleware((request: NextRequest) => {
+export default withClerkMiddleware(async (request: NextRequest) => {
   if (matches(request.nextUrl.pathname, publicPaths)) return NextResponse.next();
 
   // if the user is not signed in redirect them to the sign in page. 

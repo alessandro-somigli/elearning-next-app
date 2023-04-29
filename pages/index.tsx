@@ -31,7 +31,7 @@ export const getServerSideProps: GetServerSideProps<{
   const role = GetUserRole({ useremail: emailAddress })
 
   return { props: { 
-    courses: await courses ,
+    courses: await courses,
     role: await role
   } }
 };

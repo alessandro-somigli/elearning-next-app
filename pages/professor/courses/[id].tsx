@@ -5,7 +5,7 @@ import type { Course } from "@/types/schema";
 
 import style from "@/styles/pages/course.module.scss";
 import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
-import { GetCourseData, GetCourseDataResponse } from "@/pages/api/course/course";
+import { GetCourseData, GetCourseDataResponse } from "@/pages/api/course/data";
 
 export const config = {
   runtime: "experimental-edge",
