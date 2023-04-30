@@ -1,34 +1,41 @@
-type Professor = {
-  email: string;
+type Teacher = {
+  teacher_email: string;
 };
 
 type Student = {
-  email: string;
+  student_email: string;
 };
 
 type Course = {
-  ID: number;
-  name: string;
+  course_ID: number;
+  course_name: string;
 };
 
 type Test = {
-  ID: number;
-  name: string;
-  time: number;
-  questions: {};
+  test_ID: number;
+  test_name: string;
+  test_time: number;
+  test_questions: {};
 
-  professor: Professor["email"];
-  course: Course["ID"];
+  test_teacher: Teacher["teacher_email"];
+  test_course: Course["course_ID"];
 };
 
-type Own = {
-  professor: Professor["email"];
-  course: Course["ID"];
+type TeacherOwnsCourse = {
+  owns_teacher: Teacher["teacher_email"];
+  owns_course: Course["course_ID"];
 };
 
-type Partake = {
-  student: Student["email"];
-  course: Course["ID"];
+type StudentPartakesCourse = {
+  partakes_student: Student["student_email"];
+  partakes_course: Course["course_ID"];
 };
 
-export type { Professor, Student, Course, Test, Own, Partake };
+type StudentScoresTest = {
+  scores_student: Student["student_email"];
+  scores_test: Test["test_ID"];
+
+  scores_score: number
+}
+
+export type { Teacher, Student, Course, Test, TeacherOwnsCourse, StudentPartakesCourse, StudentScoresTest };

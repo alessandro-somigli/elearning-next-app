@@ -16,31 +16,30 @@ export const config = {
   regions: ["fra1"],
 };
 
-export type GetUserRoleResponse = "student" | "professor"
+export type GetUserRoleResponse = "student" | "teacher";
 
-export const GetUserRole = async (params: { useremail: string | null }): Promise<GetUserRoleResponse> => {
+export const GetUserRole = async (params: {
+  useremail: string | null;
+}): Promise<GetUserRoleResponse> => {
   const DBresponse = await planetscale.execute(`
-  SELECT * FROM Professors
-  WHERE Professors.email = '${params.useremail}';
+  SELECT * FROM Teachers
+  WHERE Teachers.teacher_email = '${params.useremail}';
   `);
 
-  return (DBresponse.rows.length == 0)? "student" : "professor"
-}
+  return DBresponse.rows.length == 0 ? "student" : "teacher";
+};
 
-export default async function GET (
+export default async function GET(
   request: NextRequest,
   context: NextFetchEvent
 ) {
-  const { userId } = getAuth(request)
-  const useremail = await getUserEmail({ userid: userId }) as GetUserEmailResponse
+  const { userId } = getAuth(request);
+  const useremail = (await getUserEmail({ userid: userId })) as GetUserEmailResponse;
 
-  return NextResponse.json( 
-    await GetUserRole({ useremail: useremail }),
-    {
-      status: 200,
-      headers: {
-        'Cache-Control': 's-maxage=60, stale-while-revalidate=600'
-      }
-    }
-  );
+  return NextResponse.json(await GetUserRole({ useremail: useremail }), {
+    status: 200,
+    headers: {
+      "Cache-Control": "s-maxage=60, stale-while-revalidate=600",
+    },
+  });
 }

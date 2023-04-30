@@ -2,7 +2,7 @@ import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
 
 import { connect } from "@planetscale/database";
 
-import { Course, Own, Partake, Test } from "@/types/schema";
+import { Course, TeacherOwnsCourse, StudentPartakesCourse, Test } from "@/types/schema";
 
 const planetscale = connect({
   host: process.env.DATABASE_HOST,
@@ -16,46 +16,50 @@ export const config = {
 };
 
 export type GetCourseDataResponse = {
-  course: string
-  professors: Array<Own>
-  students: Array<Partake>
-  tests: Array<Test>
-} | null
+  course: string;
+  teachers: Array<TeacherOwnsCourse>;
+  students: Array<StudentPartakesCourse>;
+  tests: Array<Test>;
+} | null;
 
-export const GetCourseData = async (params: { courseid: string }): Promise<GetCourseDataResponse> => {
-  const professors = planetscale.execute(`
-  SELECT Own.*, Courses.* FROM Courses 
-  INNER JOIN Own ON Courses.ID = Own.course
-  WHERE Courses.ID = ${params.courseid};
+export type AssertedGetCourseDataResponse = Exclude<GetCourseDataResponse, null>;
+
+export const GetCourseData = async (params: {
+  courseid: string;
+}): Promise<GetCourseDataResponse> => {
+  const teachers = planetscale.execute(`
+  SELECT TeachersOwnCourses.*, Courses.* FROM Courses 
+  INNER JOIN TeachersOwnCourses ON Courses.course_ID = TeachersOwnCourses.owns_course
+  WHERE Courses.course_ID = ${params.courseid};
   `);
 
   const students = planetscale.execute(`
-  SELECT Partake.* FROM Courses 
-  INNER JOIN Partake ON Courses.ID = Partake.course
-  WHERE Courses.ID = ${params.courseid};
+  SELECT StudentsPartakeCourses.* FROM Courses 
+  INNER JOIN StudentsPartakeCourses ON Courses.course_ID = StudentsPartakeCourses.partakes_course
+  WHERE Courses.course_ID = ${params.courseid};
   `);
-  
+
   const tests = planetscale.execute(`
   SELECT Tests.* FROM Courses 
-  INNER JOIN Tests ON Courses.ID = Tests.course
-  WHERE Courses.ID = ${params.courseid};
+  INNER JOIN Tests ON Courses.course_ID = Tests.test_course
+  WHERE Courses.course_ID = ${params.courseid};
   `);
 
-  const professorsResponse = (await professors).rows as Array<Own & Course>
-  const studentsResponse = (await students).rows as Array<Partake>
-  const testsResponse = (await tests).rows as Array<Test>
-  
-  if (professorsResponse.length == 0) return null
+  const teachersResponse = (await teachers).rows as Array<TeacherOwnsCourse & Course>;
+  const studentsResponse = (await students).rows as Array<StudentPartakesCourse>;
+  const testsResponse = (await tests).rows as Array<Test>;
+
+  if (teachersResponse.length == 0) return null;
 
   return {
-    course: professorsResponse[0].name,
-    professors: professorsResponse as Array<Own>,
+    course: teachersResponse[0].course_name,
+    teachers: teachersResponse as Array<TeacherOwnsCourse>,
     students: studentsResponse,
-    tests: testsResponse
-  } as GetCourseDataResponse
-}
+    tests: testsResponse,
+  } as GetCourseDataResponse;
+};
 
-export default async function GET (
+export default async function GET(
   request: NextRequest,
   context: NextFetchEvent
 ) {
@@ -63,11 +67,12 @@ export default async function GET (
   const courseid = searchParams.get("courseid");
 
   return NextResponse.json(
-    (courseid)? await GetCourseData({ courseid }) : null,
+    courseid ? await GetCourseData({ courseid }) : null,
     {
       status: 200,
       headers: {
-        'Cache-Control': 's-maxage=60, stale-while-revalidate=600'
-      }
-    });
+        "Cache-Control": "s-maxage=60, stale-while-revalidate=600",
+      },
+    }
+  );
 }

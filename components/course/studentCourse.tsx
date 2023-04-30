@@ -1,14 +1,13 @@
-import { GetCourseDataResponse } from "@/pages/api/getCourseData";
+import { AssertedGetCourseDataResponse } from "@/pages/api/getCourseData";
 
 type StudentCourseProps = {
-    data: GetCourseDataResponse
-}
+  data: AssertedGetCourseDataResponse;
+};
 
 export default function StudentCourse(props: StudentCourseProps) {
-  
   return (
     <div>
-      <span></span>
+      <span>student page</span>
     </div>
   );
 }

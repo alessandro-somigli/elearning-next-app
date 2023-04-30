@@ -19,14 +19,16 @@ export const config = {
 
 export type GetCoursesResponse = Array<Course>;
 
-export const GetCourses = async (params: { useremail: string | null; }): Promise<GetCoursesResponse> => {
+export const GetCourses = async (params: {
+  useremail: string | null;
+}): Promise<GetCoursesResponse> => {
   let fetch_courses = "";
   if (params.useremail) {
     fetch_courses = `
     SELECT DISTINCT Courses.* FROM Courses
-    LEFT JOIN Partake ON Courses.ID = Partake.course
-    LEFT JOIN Own ON Courses.ID = Own.course
-    WHERE Partake.student = '${params.useremail}' OR Own.professor = '${params.useremail}';`;
+    LEFT JOIN StudentsPartakeCourses ON Courses.course_ID = StudentsPartakeCourses.partakes_course
+    LEFT JOIN TeachersOwnCourses ON Courses.course_ID = TeachersOwnCourses.owns_course
+    WHERE StudentsPartakeCourses.partakes_student = '${params.useremail}' OR TeachersOwnCourses.owns_teacher = '${params.useremail}';`;
   } else {
     fetch_courses = `SELECT * FROM Courses;`;
   }
@@ -35,19 +37,17 @@ export const GetCourses = async (params: { useremail: string | null; }): Promise
   return DBResponse.rows as GetCoursesResponse;
 };
 
-export default async function GET (
+export default async function GET(
   request: NextRequest,
   context: NextFetchEvent
 ) {
-  const { userId } = getAuth(request)
-  const useremail = await getUserEmail({ userid: userId }) as GetUserEmailResponse
+  const { userId } = getAuth(request);
+  const useremail = (await getUserEmail({ userid: userId })) as GetUserEmailResponse;
 
-  return NextResponse.json( 
-    await GetCourses({ useremail }),
-    {
-      status: 200,
-      headers: {
-        'Cache-Control': 's-maxage=60, stale-while-revalidate=600'
-      }
-    } );
+  return NextResponse.json(await GetCourses({ useremail }), {
+    status: 200,
+    headers: {
+      "Cache-Control": "s-maxage=60, stale-while-revalidate=600",
+    },
+  });
 }
