@@ -6,7 +6,7 @@ import { clerkClient, getAuth } from '@clerk/nextjs/server'
 import { GetCourses, GetCoursesResponse } from '@/pages/api/getCourses'
 
 import Navbar from '@/components/navbar'
-import Courses from '@/components/courses'
+import Courses from '@/components/course/courses'
 
 import style from '@/styles/pages/home.module.scss'
 

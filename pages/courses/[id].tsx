@@ -3,13 +3,17 @@ import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult
 
 import { GetCourseData, GetCourseDataResponse } from "@/pages/api/getCourseData";
 import { getAuth } from "@clerk/nextjs/dist/server/getAuth";
-import { getUserEmail } from "@/pages/api/getUserEmail";
+import { getUserEmail, GetUserEmailResponse } from "@/pages/api/getUserEmail";
+import { GetUserRole, GetUserRoleResponse } from "@/pages/api/getUserRole";
 
-import Navbar from "@/components/navbar";
 import type { Course } from "@/types/schema";
 
+import Navbar from "@/components/navbar";
+import Error from "@/components/error";
+import ProfessorCourse from "@/components/course/professorCourse";
+import StudentCourse from "@/components/course/studentCourse";
+
 import style from "@/styles/pages/course.module.scss";
-import { GetUserRole } from "../api/getUserRole";
 
 export const config = {
   runtime: "experimental-edge",
@@ -34,9 +38,9 @@ export const getServerSideProps: GetServerSideProps<{
     role: null } }
 
   const { userId } = getAuth(context.req);
-  const userEmail = await getUserEmail({ userid: userId })
+  const userEmail = await getUserEmail({ userid: userId }) as GetUserEmailResponse
 
-  const userRole = await GetUserRole({ useremail: userEmail })
+  const userRole = await GetUserRole({ useremail: userEmail }) as GetUserRoleResponse
 
   let isAuthorized = false
 
@@ -64,7 +68,7 @@ export default function Course(props: InferGetServerSidePropsType<typeof getServ
   return (
     <>
       <Head>
-        <title>Learnify - {props.data?.course}</title>
+        <title>Learnify - course</title>
         <meta name="description" content="visualize the details of a course" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
@@ -73,7 +77,17 @@ export default function Course(props: InferGetServerSidePropsType<typeof getServ
       <main>
         <Navbar />
 
-        {JSON.stringify(props.data)}
+        { props.error? 
+            <Error>
+              { props.error === "NO_COURSE_ID"? "ERROR: no course ID was inserted." :
+                props.error === "NO_COURSE_FOUND"? "ERROR: this course does not exist." :
+                props.error === "USER_NOT_AUTHORIZED"? "ERROR: you are not authorized to enter this course." : 
+                props.error }
+            </Error> : 
+            
+          props.role === "professor"? <ProfessorCourse data={ props.data } /> :
+          
+          props.role === "student"? <StudentCourse data={ props.data } /> : null}
       </main>
     </>
   );
