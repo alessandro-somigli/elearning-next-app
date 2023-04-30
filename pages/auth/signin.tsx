@@ -1,4 +1,5 @@
 import { SignIn } from "@clerk/nextjs";
+import { useRouter } from "next/router";
 
 export const config = { 
   runtime: 'experimental-edge',
@@ -6,8 +7,10 @@ export const config = {
 }
 
 export default function SignInPage() { 
-  
+  const router = useRouter()
+  const { redirect_url } = router.query
+
   return (
-    <SignIn />
+    <SignIn redirectUrl={redirect_url?.toString()} />
   )
 }

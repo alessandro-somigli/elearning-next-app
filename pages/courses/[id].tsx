@@ -73,7 +73,7 @@ export default function Course(props: InferGetServerSidePropsType<typeof getServ
       <main>
         <Navbar />
 
-        {JSON.stringify(props.data)}      
+        {JSON.stringify(props.data)}
       </main>
     </>
   );
