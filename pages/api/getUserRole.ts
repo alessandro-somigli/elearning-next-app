@@ -16,7 +16,7 @@ export const config = {
   regions: ["fra1"],
 };
 
-export type GetUserRoleResponse = "student" | "teahcer"
+export type GetUserRoleResponse = "student" | "professor"
 
 export const GetUserRole = async (params: { useremail: string | null }): Promise<GetUserRoleResponse> => {
   const DBresponse = await planetscale.execute(`
@@ -24,7 +24,7 @@ export const GetUserRole = async (params: { useremail: string | null }): Promise
   WHERE Professors.email = '${params.useremail}';
   `);
 
-  return (DBresponse.rows.length == 0)? "student" : "teahcer"
+  return (DBresponse.rows.length == 0)? "student" : "professor"
 }
 
 export default async function GET (
