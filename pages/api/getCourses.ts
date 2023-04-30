@@ -1,6 +1,10 @@
-import { connect } from "@planetscale/database";
 import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
-import { Course, Professor } from "@/types/schema";
+
+import { connect } from "@planetscale/database";
+import { getAuth } from "@clerk/nextjs/dist/server/getAuth";
+
+import { getUserEmail, GetUserEmailResponse } from "./getUserEmail";
+import { Course } from "@/types/schema";
 
 const planetscale = connect({
   host: process.env.DATABASE_HOST,
@@ -17,13 +21,13 @@ export type GetCoursesResponse = Array<Course>;
 
 export const GetCourses = async (params: { useremail: string | null; }): Promise<GetCoursesResponse> => {
   let fetch_courses = "";
-  if (params.useremail) { // row reads: Courses.rows + Partake.rows + Own.rows
+  if (params.useremail) {
     fetch_courses = `
     SELECT DISTINCT Courses.* FROM Courses
     LEFT JOIN Partake ON Courses.ID = Partake.course
     LEFT JOIN Own ON Courses.ID = Own.course
     WHERE Partake.student = '${params.useremail}' OR Own.professor = '${params.useremail}';`;
-  } else { // row reads: Courses.rows
+  } else {
     fetch_courses = `SELECT * FROM Courses;`;
   }
 
@@ -31,19 +35,19 @@ export const GetCourses = async (params: { useremail: string | null; }): Promise
   return DBResponse.rows as GetCoursesResponse;
 };
 
-export default async function GET(
+export default async function GET (
   request: NextRequest,
   context: NextFetchEvent
 ) {
-  const { searchParams } = new URL(request.url);
-  const useremail = searchParams.get("useremail");
+  const { userId } = getAuth(request)
+  const useremail = await getUserEmail({ userid: userId }) as GetUserEmailResponse
 
   return NextResponse.json( 
     await GetCourses({ useremail }),
     {
       status: 200,
       headers: {
-        'Cache-Control': 's-maxage=1, stale-while-revalidate'
+        'Cache-Control': 's-maxage=60, stale-while-revalidate=600'
       }
     } );
 }

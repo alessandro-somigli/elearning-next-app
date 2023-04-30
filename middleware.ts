@@ -3,9 +3,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 // Set the paths that don't require the user to be signed in
-const publicPaths = ["/auth/signin*"];
-const professorPaths = ["/professor*"];
-const studentPaths = ["/student*"]
+const publicPaths = ["/auth/signin*", "/"];
 
 const matches = (path: string, resitrictions: Array<string>): string | undefined => {
   return resitrictions.find(p =>
@@ -13,7 +11,7 @@ const matches = (path: string, resitrictions: Array<string>): string | undefined
   );
 };
 
-export default withClerkMiddleware(async (request: NextRequest) => {
+export default withClerkMiddleware((request: NextRequest) => {
   if (matches(request.nextUrl.pathname, publicPaths)) return NextResponse.next();
 
   // if the user is not signed in redirect them to the sign in page. 

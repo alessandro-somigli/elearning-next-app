@@ -6,8 +6,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 
 type CoursesProps = {
-  courses: Array<Course>;
-  role: "student" | "professor"
+  courses: Array<Course>
 };
 
 export default function Courses(props: CoursesProps) {
@@ -18,7 +17,7 @@ export default function Courses(props: CoursesProps) {
     <div className={style.courses}>
       <span className={style.courses_title}>Courses {isSignedIn? <>of {user.fullName}</> : <></>}</span>
       {props.courses.map(course => (
-        <div key={course.ID} className={style.course} onClick={() => router.push(`/${props.role}/courses/${course.ID}`)}>
+        <div key={course.ID} className={style.course} onClick={() => router.push(`/courses/${course.ID}`)}>
           <span className={style.course_title}>{course.name}</span> 
         </div>
       ))}
