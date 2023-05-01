@@ -7,14 +7,17 @@ export const config = {
   regions: ["fra1"],
 };
 
+export type AssertedGetUserEmailResponse = Exclude<GetUserEmailResponse, null>
 export type GetUserEmailResponse = string | null;
 
 export const getUserEmail = async (params: {
   userid: string | null;
 }): Promise<GetUserEmailResponse> => {
   if (params.userid) {
-    const user = await clerkClient.users.getUser(params.userid);
-    return user.emailAddresses[0].emailAddress;
+    try {
+      const user = await clerkClient.users.getUser(params.userid);
+      return user.emailAddresses[0].emailAddress;
+    } catch { return null; }
   } else { return null; }
 };
 

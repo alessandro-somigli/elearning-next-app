@@ -15,6 +15,7 @@ import TeacherCourse from "@/components/course/teacherCourse";
 import StudentCourse from "@/components/course/studentCourse";
 
 import style from "@/styles/pages/course.module.scss";
+import { ParsedUrlQuery } from "querystring";
 
 export const config = {
   runtime: "experimental-edge",
@@ -26,7 +27,7 @@ export const getServerSideProps: GetServerSideProps<{
   error: "NO_COURSE_ID" | "NO_COURSE_FOUND" | "USER_NOT_AUTHORIZED" | null;
   role: "teacher" | "student" | null;
 }> = async (context: GetServerSidePropsContext) => {
-  const { id } = context.query;
+  const { id } = context.params as ParsedUrlQuery;
   if (!id) return {
     props: {
       data: null,
