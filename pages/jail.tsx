@@ -2,9 +2,13 @@ import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsT
 import Head from "next/head";
 
 import Navbar from "@/components/navbar";
-import { SignOutButton, SignedIn, SignedOut } from "@clerk/nextjs";
+import { SignOutButton, } from "@clerk/nextjs";
 
-import { getAuth, buildClerkProps } from "@clerk/nextjs/server";
+import { getAuth, } from "@clerk/nextjs/server";
+
+import style from "@/styles/pages/jail.module.scss";
+import Spinner from '@/components/spinner';
+import { useState } from 'react';
 
 export const config = {
   runtime: "experimental-edge",
@@ -27,6 +31,7 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context: GetSer
 }
 
 export default function Jail(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const [visible, setVisible] = useState(false);
 
   return (
     <>
@@ -38,11 +43,18 @@ export default function Jail(props: InferGetServerSidePropsType<typeof getServer
       </Head>
 
       <main>
-        <Navbar />
+        <Spinner visible={visible} />
+        <Navbar showAccount={false} />
 
-        <span>You&apos;re in jail!</span>
-        <span>Use the school account if you want to exit the jail.</span>
-        <SignOutButton />
+        <div className={style.alert_container}>
+          <div className={style.alert}>
+            <h2>Sei in prigione!🔒</h2>
+            <h3>L’account con cui ti sei registrato non fa parte del dominio della scuola.</h3>
+            <h3>Torna alla 🏠 facendo un sign out.</h3>
+          </div>
+
+          <SignOutButton><button className={style.signout_button} onClick={() => setVisible(true)}>sign out</button></SignOutButton>
+        </div>
       </main>
     </>
   );

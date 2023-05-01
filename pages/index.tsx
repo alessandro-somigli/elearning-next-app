@@ -9,6 +9,8 @@ import Navbar from "@/components/navbar";
 import Courses from "@/components/course/courses";
 
 import style from "@/styles/pages/home.module.scss";
+import { useState } from "react";
+import Spinner from "@/components/spinner";
 
 export const config = {
   runtime: "experimental-edge",
@@ -28,6 +30,8 @@ export const getServerSideProps: GetServerSideProps<{ courses: GetCoursesRespons
 };
 
 export default function Home(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const [visible, setVisible] = useState(false);
+
   return (
     <>
       <Head>
@@ -38,10 +42,11 @@ export default function Home(props: InferGetServerSidePropsType<typeof getServer
       </Head>
 
       <main>
+        <Spinner visible={visible} />
         <Navbar />
 
         <div className={style.courses_container}>
-          <Courses courses={props.courses} />
+          <Courses courses={props.courses} onClick={() => setVisible(true)}/>
         </div>
       </main>
     </>

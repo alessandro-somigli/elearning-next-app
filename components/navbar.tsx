@@ -4,7 +4,11 @@ import Account from "./account";
 
 import style from "@/styles/components/navbar.module.scss";
 
-export default function Navbar() {
+type NavbarProps = {
+  showAccount?: boolean
+}
+
+export default function Navbar({ showAccount = true }: NavbarProps ) {
   return (
     <nav className={style.nav}>
       <div className={style.nav_logo}>
@@ -18,7 +22,7 @@ export default function Navbar() {
         <span className={style.logo_text}>Learnify</span>
       </div>
 
-      <Account />
+      { showAccount? <Account /> : null }
     </nav>
   );
 }

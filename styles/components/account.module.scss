@@ -28,16 +28,16 @@
 
         cursor: pointer;
 
-        color: #6855E0;
+        color: #000;
         background-color: #fff;
-        border: 1px solid #6855E0;
-    }
+        border: 1px solid #000;
       
-    .signin_button:hover {
-        color: white;
-        width: none;
-        box-shadow: 0 0 20px #6855E090;
-        background-color: #6855E0;
+        &:hover {
+          color: #fff;
+          width: none;
+          box-shadow: 0 0 20px #000;
+          background-color: #000;
+        }
     }
 }
 

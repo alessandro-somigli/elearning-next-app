@@ -6,12 +6,18 @@ import { Course } from "@/types/schema";
 import style from "@/styles/components/courses.module.scss";
 
 type CoursesProps = {
-  courses: Array<Course>;
+  courses: Array<Course>
+  onClick?: () => void
 };
 
 export default function Courses(props: CoursesProps) {
   const { user, isSignedIn } = useUser();
   const router = useRouter();
+
+  const handleClick = (courseid: number) => {
+    router.push(`/courses/${courseid}`);
+    props.onClick? props.onClick() : null
+  }
 
   return (
     <div className={style.courses}>
@@ -22,7 +28,7 @@ export default function Courses(props: CoursesProps) {
         <div
           key={course.course_ID}
           className={style.course}
-          onClick={() => router.push(`/courses/${course.course_ID}`)}
+          onClick={() => handleClick(course.course_ID)}
         >
           <span className={style.course_title}>{course.course_name}</span>
         </div>

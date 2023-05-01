@@ -1,0 +1,53 @@
+.alert_container {
+  width: 100%;
+  
+  padding-top: 2.5rem;
+
+  .alert {
+    width: 50%;
+
+    padding: 1.5rem 3rem;
+
+    margin: 0 auto;
+
+    text-align: center;
+
+    background-color: #fff;
+
+    border-radius: 1.5rem;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  }
+}
+
+.signout_button {
+  position: absolute;
+  
+  left: 50%;
+  transform: translate(-50%, 4rem);
+
+  width: 8rem;
+  height: 3rem;
+
+  border: 0;
+  border-radius: 4px;
+
+  font-size: 1rem;
+  font-family: inherit;
+  font-weight: 600;
+
+  box-shadow: 0 0 20px #00000016;
+  transition: 0.4s;
+
+  cursor: pointer;
+
+  color: #000;
+  background-color: #fff;
+  border: 1px solid #000;
+
+  &:hover {
+    color: #fff;
+    width: none;
+    box-shadow: 0 0 20px #000;
+    background-color: #000;
+  }
+}
