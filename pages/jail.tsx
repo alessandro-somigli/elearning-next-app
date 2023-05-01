@@ -6,6 +6,11 @@ import { SignOutButton, SignedIn, SignedOut } from "@clerk/nextjs";
 
 import { getAuth, buildClerkProps } from "@clerk/nextjs/server";
 
+export const config = {
+  runtime: "experimental-edge",
+  regions: ["fra1"],
+};
+
 export const getServerSideProps: GetServerSideProps<{}> = async (context: GetServerSidePropsContext) => {
   const { userId } = getAuth(context.req);
 
