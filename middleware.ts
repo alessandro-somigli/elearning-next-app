@@ -22,9 +22,13 @@ const redirectTo = (request: NextRequest, params: {
 }
 
 export default withClerkMiddleware(async (request: NextRequest) => {
-  if (matches(request.nextUrl.pathname, jailPaths)) return NextResponse.next();
-
   const userId = getAuth(request).userId;
+
+  if (matches(request.nextUrl.pathname, jailPaths)) { 
+    if (!userId) redirectTo(request, { to: "/" });
+    else return NextResponse.next();
+  }
+
   if (userId) {
     const email = await getUserEmail({ userid: userId }) as AssertedGetUserEmailResponse;
     if (email.split("@")[1] !== "itismeucci.com") return redirectTo(request, { to: "/jail" })

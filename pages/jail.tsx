@@ -13,22 +13,7 @@ export const config = {
   regions: ["fra1"],
 };
 
-export const getServerSideProps: GetServerSideProps<{}> = async (context: GetServerSidePropsContext) => {
-  const { userId } = getAuth(context.req);
-
-  if (!userId) { 
-    return { 
-      redirect: {
-        destination: "/",
-        permanent: true,
-      }, props: {} 
-    };
-  }
-
-  return { props: {} }
-}
-
-export default function Jail(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function Jail() {
   return (
     <>
       <Head>
