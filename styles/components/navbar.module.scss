@@ -20,10 +20,13 @@
     align-items: center;
 
     .logo_image {
-        width: 4rem;
-        height: 4rem;
+        width: 3.5rem;
+        height: 3.5rem;
+        transform: rotateY(180deg);
 
-        margin-left: .25rem;
+        cursor: pointer;
+
+        margin: 0 .5rem;
     }
 
     .logo_text {

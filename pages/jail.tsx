@@ -7,8 +7,6 @@ import { SignOutButton, } from "@clerk/nextjs";
 import { getAuth, } from "@clerk/nextjs/server";
 
 import style from "@/styles/pages/jail.module.scss";
-import Spinner from '@/components/spinner';
-import { useState } from 'react';
 
 export const config = {
   runtime: "experimental-edge",
@@ -31,8 +29,6 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context: GetSer
 }
 
 export default function Jail(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const [visible, setVisible] = useState(false);
-
   return (
     <>
       <Head>
@@ -43,7 +39,6 @@ export default function Jail(props: InferGetServerSidePropsType<typeof getServer
       </Head>
 
       <main>
-        <Spinner visible={visible} />
         <Navbar showAccount={false} />
 
         <div className={style.alert_container}>
@@ -53,7 +48,7 @@ export default function Jail(props: InferGetServerSidePropsType<typeof getServer
             <h3>Torna alla 🏠 facendo un sign out.</h3>
           </div>
 
-          <SignOutButton><button className={style.signout_button} onClick={() => setVisible(true)}>sign out</button></SignOutButton>
+          <SignOutButton><button className={style.signout_button}>sign out</button></SignOutButton>
         </div>
       </main>
     </>

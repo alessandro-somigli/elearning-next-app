@@ -16,13 +16,16 @@
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   border-radius: 5rem;
 
-  transition: transform .4s ease;
+  transition: opacity .3s ease, transform .3s ease;
 
   &.visible {
-    transform: translateX(-50%) translateY(5rem) scale(.5);
+    transform: translateX(-50%) translateY(3.5rem) scale(.5);
+    opacity: 1;
   }
   &.invisible {
-    transform: translateX(-50%) translateY(-5rem) scale(.5);
+    z-index: -1;
+    transform: translateX(-50%) translateY(2.5rem) scale(.5);
+    opacity: 0;
   }
 }
 .lds_spinner div {
